@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.SpringBootJPA.dao.EmployeeRepository;
 import com.example.SpringBootJPA.entities.EmployeeEntity;
+import com.example.SpringBootJPA.exceptions.RecordNotFoundException;
 import com.example.SpringBootJPA.service.EmployeeService;
 
 @Service
@@ -18,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository empRepository;
-	
+
 	@Override
 	public List<EmployeeEntity> getAllEmployees() {
 		return empRepository.findAll();
@@ -27,12 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeEntity getEmployee(Long employeeId) {
 		Optional<EmployeeEntity> empEntity = empRepository.findById(employeeId);
-		return empEntity.isPresent() ? empEntity.get() : null;
+		if(!empEntity.isPresent()){
+			throw new RecordNotFoundException(employeeId+" not exists");
+		}
+		return  empEntity.get();
 	}
 
 	@Override
 	public void saveEmployee(EmployeeEntity empEntity) {
-		empRepository.saveAndFlush(empEntity);
+		empRepository.save(empEntity);
 	}
 
 	@Override
