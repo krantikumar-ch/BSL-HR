@@ -10,7 +10,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
-import javax.validation.Payload;
 
 
 
@@ -24,11 +23,11 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Target({ FIELD, METHOD, TYPE })
 public @interface UniqueChild {
+	
 	String message() default "";
+	
 	String[] uniqueKeys() default {};
+	
 	String primaryKey() default "";
-	
-	Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
-	
+
 }

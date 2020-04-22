@@ -27,7 +27,6 @@ public class EmployeeEntity {
 	@SequenceGenerator(name="empSeq", sequenceName="EMPLOYEES_SEQ", allocationSize=1)
 	private Long employeeId;
 	
-	
 	@Column(name="FIRST_NAME")
 	private String firstName;
 	
