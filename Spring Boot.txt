@@ -1,0 +1,684 @@
+																Spring Boot tutorial
+																--------------------
+
+	URL: https://www.youtube.com/watch?v=35EQXmHKZYs
+	
+28-Oct-2019
+-----------
+	
+	What is Spring boot?
+		Spring boot is to give ready made configurations which can start Enterprise applications immediately. It will give embedded server like tomcat, parent pom (spring-boot-starter-web, spring-boot-starter-jdbc). If developer want to change any configurations spring boot will not encourage xml configuarations
+		we can do changes in application.properties
+		
+		Develop Application is like domain module , different connections, daofactory implementations
+								 implement SpringBoot with hibernate/JPA(Restful web services) and React JS
+								 ExceptionHandlings
+								 Pagination
+								 Handle file upload, file download, Drag and drop component Read/Write csv, Excel,PDf files implementations
+								 
+								 Implement custom annotation to handle validation
+								 Implement Log integration
+								 Implement Spring profiles
+								 Implement Hikaricp for server connection pool
+								 Implement security (cookies / oAuth / session Id) throughout session
+								 Implement JMockito testing 
+								 Optimize performance
+								 Code coverage 
+								 
+								 
+								 
+		
+	Microservice Architecture
+	SpringBoot
+	SpringCloud
+	Gateway servers(Eureka)
+	
+		
+
+
+
+	Why exclude HibernateJpaAutoConfiguration in SpringBootApplication annotations
+	@Resource @Inject @Autowired annotation tag	
+	@PersistenceContext annotation
+	@sqlResultSetMapping
+	Difference between @Component @Service @Repository @Controller
+	filters vs interceptors
+	How spring profile is suitable to build application into prod which has on fly db connection
+	
+		
+22-Apr-2014 pending
+Testing
+Oauth2
+Ehcache
+authentication
+		
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	
+																Spring Boot tutorial
+																--------------------
+	
+	url: https://www.youtube.com/playlist?list=PLzS3AYzXBoj8UcLsBN3UXd7Nf1T4ZyJa0
+		 https://howtodoinjava.com/spring-boot-tutorials/
+		 
+		 
+
+09-04-2020
+----------
+	What spring boot brings
+		Convention over configuration: 		Spring boot has taken away all the xml based configuration and provided annotations
+		Standardization of microservices:	Provides unified ecosystem of libraries and standards to all the developers utilizing microservices methodologies
+		Integrated server of development:	Attached a tomcat/jetty server with the compiled jar using maven/gradle
+		Cloud support					:	Provides cloud support for configuration, tools and clients. It is compatible with Cloud native and works
+											Seamlessly with Cloud foundry, Pivotal etc
+		Adapt & support for 3rd party
+		Library							:	widen support for 3rd party open source library like NO-SQL DB, Distributed Cache etc.,
+		
+					Spring boot = (Spring framework - XML configuration)+ Integrated Server
+					
+		
+		
+		
+	Create Spring boot application
+		https://start.spring.io/ create spring boot projects. then extract zip-> in Eclipse -> import -> Existing maven projects
+		
+12-04-2020
+-----------		
+		@SpringBootApplication
+			Springboot mostly about auto-configuration. Auto-configuration is done by component scan. i.e., find classes in classpath for @Component configuration
+			and @Configuration(configuring class in context level)
+			It enables three features
+				@EnableAutoConfiguration --> enables auto-configuration of spring application context. Attempts to guess and configure beans that
+											 application likely need to based on predefined classes in classpath
+											 Eg.Application has tomcat-embedded.jar so this configures TomcatServletWebServerFactory class in spring beans
+											 
+											 Auto-configuration tries to be as intelligent as possible and will back-away as you define more of your own configuration. You can always manually exclude any configuration that you never want to apply using two methods
+											 Use excludeName()
+											 Using the spring.autoconfigure.exclude property in properties file. e.g.
+											 @EnableAutoConfiguration(exclude={})
+											 
+				@ComponentScan			 --> It will scan and find  classes in classpath for @Component annotation
+				@SpringBootConfiguration --> Indicates that a class provides Spring boot application configuration. It can be used as an alternative 
+											 to the spring standard @Configuration annotation so that configuration can be found automatically
+				
+		
+		@ImportAutoConfiguration
+			it imports only specified auto configuration classes. @EnableAutoConfiguration, @ImportAutoConfiguration are attempts to configure beans
+			that are found in classpath whereas @ImportAutoConfiguration configures only provided classes in given annotation
+			
+			
+			@AutoConfigureBefore
+			@AutoConfigureAfter
+			@AutoConfigureOrder
+			@ConditionalOnBean
+			@ConditionalOnMissingBean
+			@ConditionalOnClass
+			@ConditionalOnMissingClass
+			@ConditionalOnNotWebApplication
+			@ConditionalOnWebApplication
+			@ConditionalOnProperty
+			@ConditionalOnResource
+			@ConditionalOnExpression
+			@ConditionalOnCloudPlatform
+
+		 What launch class does?
+			
+			Spring application from a Java main() method. It typically does following things 
+				creates an instance of spring application context
+				Enables functionality of accepting command-line arguments and expose them as a spring properties
+				Load all spring beans as per the configuration
+			
+				Run the launch application and check logs
+					
+					@SpringBootApplication
+						public class App 
+						{
+							public static void main(String[] args) 
+							{
+								ApplicationContext ctx = SpringApplication.run(App.class, args);
+								 
+								String[] beanNames = ctx.getBeanDefinitionNames();
+								 
+								Arrays.sort(beanNames);
+						 
+								for (String beanName : beanNames) {
+									System.out.println(beanName);
+								}
+							}
+						}
+				Simply pass -Ddebug=true as VM argument you will get lots of debug logs having similar information
+
+14-04-2020
+----------
+
+	Disadvantages of springboot
+	---------------------------
+		Migration Efforts: Migration from existing spring project to springboot project is not straightforward. SpringBoot is mostly for new development
+		
+		Deployment to websphere/weblogic/other App servers: Deploying in websphere/ weblogic/ other App servers are not very simple. We need to make
+		few changes like downloading jpa version, removing conflict jars etc., to make it work an application
+		
+		Microservices & Cloud native: Spring boot is developed keeping micro services and cloud native in mind. You may not see improvemennts other areas
+		
+		
+	AOP(Aspect Oriented Programming)
+	---------------------------------
+		In AOP, aspects enable the modularization of concerns such as transaction management, 
+		logging or security that cut across multiple types and objects
+		
+			Joinpoint 		: 	execution of the program, such as execution of method, Handling an exception. In Spring AOP joinpoints always represents
+								a method of execution
+			Pointcut	  	:	Expression that predicates the JoinPoint
+			Advice		  	:	Associated with pointcut expression and runs at any Joinpoint matched by the predicate expression
+								In other words(Santosh Book)	Representing the action to perform at a joinpoint specified by pointcut
+								
+			Aspect			:	Combination of advice and pointcut represented as a Aspect	 
+						 
+			Types of AOP Advice
+				Before Advice			:	Advice that executes before a join point
+				After return advice		:	Advice that executes after a join point executes normally(method returns without exception)
+				After throwing advice	:	Advice that executes if join point executes abnormally (throws exception)
+				After advice			:	Advice that executes after a join point executes normally or Abnormally
+				Around advice			:	Advice that surrounds a join point such as a method invocation
+				
+			@Aspect: annotation will helps to make it aop class	
+			
+				
+			Before Advice		 	:		@Before("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")  
+											public void before(JoinPoint joinPoint){} OR public void before(){}
+							
+			After return Advice 	:		@AfterReturning("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")  
+											public void after(JoinPoint joinPoint){} OR public void after(){}
+									
+			After throwing Advice	:		@ThrownAfter("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")  
+											public void exception(SomeCustomException ex) {} OR public void exception()
+											
+			After advice			:		@After("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")  
+											public void after(JoinPoint joinPoint){} OR public void after(){}
+											
+			Around advice			:		@Around("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")
+											public Object executeArount(ProceedingJoinPoint pjp){
+												MethodSignature methodSign = (MethodSignature) proceedingJoinPoint.getSignature();
+												Object result = proceedingJoinPoint.proceed();
+												return result;
+											}
+									
+		spring.aop.auto=false it stops sop advices execution
+		
+		@Before("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..))")
+			In execution first * indicates return type. It will accept any return type.
+			(..) indicates  that accepts any no.of parameters
+		
+		How will execute a single method for multiple pointcuts?
+			expression execution will seperate will || symbol
+			
+			"execution(* com.example.HibernateSpringBoot.*.controller.*.*(..)) ||"
+			+ "execution(* com.example.HibernateSpringBoot.*.daoimpl.*.*(..)) ||"
+			+ "execution(* com.example.HibernateSpringBoot.*.serviceimpl.*.*(..))"
+				
+				
+		Example:		
+				
+				@Aspect
+				@Component
+				public class AOPConfig {
+
+					
+					@Around("execution(* com.example.HibernateSpringBoot.*.controller.*.*(..)) ||"
+							+ "execution(* com.example.HibernateSpringBoot.*.daoimpl.*.*(..)) ||"
+							+ "execution(* com.example.HibernateSpringBoot.*.serviceimpl.*.*(..))")
+					
+					public Object executeAroundEndPoint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+						MethodSignature methodSign = (MethodSignature) proceedingJoinPoint.getSignature();
+						String className= methodSign.getDeclaringType().getName();
+						String methodName=methodSign.getName();
+						final StopWatch stopWatch = new StopWatch();
+						
+						//Measure method execution time
+						stopWatch.start();
+						Object result = proceedingJoinPoint.proceed();
+						stopWatch.stop();
+						System.out.println("--- IN AOP --- "+className+" class "+methodName+" method total execution time "+stopWatch.getTotalTimeMillis()+" ms");
+						return result;
+					}
+				}
+				
+16-04-2020
+-----------
+		
+	Java Persistence API(JPA)
+	-------------------------
+		Specification that facilitates object relational mapping(ORM) to manage relation data in java application. It provides a platform to work directly
+		with java objects instead of using sql statements
+		As JPA is a just specification. It does not perform any operation by itself.
+		Implemented JPA specification ORM tools
+			Hibernate
+			TopLink
+			iBatis
+			ORMLite
+			JPOX
+			
+		Types of mapping
+		----------------
+			one-to-one 		: 	@OneToOne 	-->	instance of each entity related to the one instance of another entity
+			
+			one-to-many		:	@OneToMany	-->	instance of each entity related to more than one instance of another entity
+			
+			many-to-one		:	@ManyToOne	-->	Multiple instances of an entity can be related to instance of one another entity
+			
+			many-to-many	:	@ManyToMany	-->	Multiple instances of an entity can be related to instance of multiples another entity
+			
+		
+		JPA entity
+		----------
+			entity is a group of states associated together into a single unit. Entity behaves an object and becomes a major constituent
+			of object-oriented paradigm
+			
+			Entity Properties
+			------------------
+				Persistability			:	an object called persist if it stored in database
+				Persistent Identity		:	each entity is unique and represents an object identity. Primary key in database
+				Transactionality		:	Each entity can perform various operations(Insert, create, update, delete). It ensures that
+											changes made be succeed or failed automatically
+				Granularity				:	Entities should not be primitives. primitive wrappers or built-in objects with single dimensional state.
+				
+		
+				A Java class can be easily transformed into an entity. For transformation the basic requirements are:
+					No-arg constructor
+					Annotation
+					
+				@Entity		:		indicates the class is an entity. This annotation must be place on the class
+				@Id			:		indicates the unique identity. (Primary key in database)
+				@Column		:		indicates the field is a column
+				@Table		:		indicates the db table  
+				
+		Persitence.xml
+		--------------
+			It is a central configuration of JPA. 
+			<persistent-unit-name> this annotation name should have persistent unit Namme
+			This annotation contains all configurations like mapping classes, database configurations etc.,
+			
+				<persistence >
+				
+					<persistence-unit name="JPAExamples">
+					
+						<class>com.thejavageek.jpa.entities.Employee</class>
+						
+						<properties>
+							<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+							<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/thejavageek" />
+							<property name="javax.persistence.jdbc.user" value="yourUserNameForDB" />
+							<property name="javax.persistence.jdbc.password" value="yourPasswordForDB" />
+						</properties>
+					
+					</persistence-unit>
+				</persistence>
+		
+		JPA Entity Manager
+		------------------
+			 EntityManager implements the API and encapsulates all of them within a single interface
+			 EntityManager is used to read, delete, create and entity
+			 An object is referenced by an entity is managed by EntityManager
+			 
+			 EntityManagerFactory interface present in java.persistence package is used to provide an entity manager
+			 
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAExamples");
+				
+				Persistence is a bootstrap class that is used to created EntityManagerFactory by providing Persistence unit name
+				
+				EntityManager em =emf.createEntityManager(); It creates new application-managed EntityManager
+				
+				em.getTransaction().begin();	getTrannsaction() 	returns the resource-level EntityTransaction object.
+												begin()				method is used to start the transaction
+				
+				em.persist(s1);	This method is used to make an instance managed and persistent.
+				
+				em.getTransaction().commit(); 
+				
+				emf.close();  
+				em.close(); 
+			
+			
+		persist(Entity class)			: 	Persistent an entity object with data
+		find(Entity class, primary key)	:	get an object based on primary key
+		remove(Entity class)			:	delete an object
+		
+		cascade operation
+		------------------
+			persist 	:	parents entity is persisted all its related entity will also be persisted
+			merge		:	parent entity is merged all its related entities will be merged
+			detach		:	parent entity is detached then all its related entity will also be detached.
+			refresh		:	parent entity is refreshed then all its related entity will also be refreshed.
+			remove		:	parent entity is removed then all its related entity will also be removed.
+			all			:	Above all operations will apply
+			
+		How to Handle Many to many mapping?
+			Many to many mapping will handle by creating third table in middle
+			The owner side should declare these annotations	
+				
+			@ManyToMany(cascade=CascadeType.ALL)
+			@JoinTable(name="user_role_mappings", 
+			joinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")},
+			inverseJoinColumns={@JoinColumn(name="user_role_id", referencedColumnName="user_role_id")}
+			)
+			public Set<UserRole> userRoles;
+			
+			The other side
+			
+			@ManyToMany(mappedBy="userRoles")
+			
+			This approach you will handle operation on one side. If you want to perform on both sides
+			create User, UserRoles UserRolesMapping and have one to many with user and userRoles, one to many with userRoles and user
+			
+		
+		Composite Key
+		-------------
+			Combination of two or more primary keys is called composite key
+			Two options to define composite key @IdClass and @EmbeddedId
+			
+				The composite primary key class must be public
+				It must have a no-arg constructor
+				It must define equals() and hashCode() methods
+				It must be Serializable
+			
+			
+			@IdClass
+			--------
+					public class AccountId implements Serializable {
+						private String accountNumber;
+					 
+						private String accountType;
+					 
+						// default constructor
+					 
+						public AccountId(String accountNumber, String accountType) {
+							this.accountNumber = accountNumber;
+							this.accountType = accountType;
+						}
+					 
+						// equals() and hashCode()
+					}
+					@Entity
+					@IdClass(AccountId.class)
+					public class Account {
+						@Id
+						private String accountNumber;
+					 
+						@Id
+						private String accountType;
+					 
+						// other fields, getters and setters
+					}
+					
+			@Embeddable
+			-----------
+					@Embeddable
+					public class BookId implements Serializable {
+						private String title;
+						private String language;
+					 
+						// default constructor
+					 
+						public BookId(String title, String language) {
+							this.title = title;
+							this.language = language;
+						}
+					 
+						// getters, equals() and hashCode() methods
+					}
+						
+					@Entity
+					public class Book {
+						@EmbeddedId
+						private BookId bookId;
+					 
+						// constructors, other fields, getters and setters
+					}	
+			
+			@IdClass, we had to specify the columns twice – once in AccountId and again in Account. But, with @EmbeddedId we didn't.	
+			
+			with @IdClass
+				SELECT account.accountNumber FROM Account account
+				
+			with @EmbeddedId class
+				SELECT book.bookId.title FROM Book book
+				
+			if we're going to access parts of the composite key individually, we can make use of @IdClass,
+			use the complete identifier as an object, @EmbeddedId is preferred.	
+			
+20-04-2020
+----------
+	
+	SpringBoot REST
+	---------------
+		Spring Boot provides integration with three JSON mapping libraries.
+
+				Gson
+				Jackson
+				JSON-B
+		Jackson is default provider of Springboot
+		Spring boot auto-configures MappingJackson2HttpMessageConverter as one of default converters to handle request and response body conversion.
+		
+		@Async, @EnableAsync
+		--------------------
+			@EnableAsync can be applied on application classes for asynchronous behavior. This annotation will look methods of @Async annotation methodSign
+			@Async methods will return a CompletableFuture to hold the result of asynchronous operatons
+			
+				@Configuration
+				@EnableAsync //Create a thread pool executor to perform multi-thread operation
+				public class AsynchConfiguration{
+				
+					@Bean(name="ayncExecutor")
+					public Executor getThreadPoolExecutor(){
+						ThreadPoolExecutor executor = new ThreadPoolExecutor();
+						executor.setCorePoolSize(3);
+						executor.setMaxPoolSize(3);
+						executor.setQueueCapacity(100);
+						executor.setThreadNamePrefix("AsynchThread-");
+						executor.initialize();
+						return executor;
+					}
+				
+				}
+		
+				Methods which shall run asynchronously use @Async annotation and method return type should be CompletableFuture
+			
+					@Service
+					public class AsyncService{
+					
+						@Async("ayncExecutor")
+						public CompletableFuture<EmployeeAddresses> getEmployeeAddress(){
+							.............
+							.............
+							EmployeeAddress empAddress = restTemplate.getObject(..) // 
+							return CompletableFuture.completeFuture(employeeNameData)
+						
+						}
+						
+						@Async("ayncExecutor")
+						public CompletableFuture<PhoneNumber> getPhoneNumbers(){
+							.............
+							.............
+							PhoneNumber phoneNumber = restTemplate.getObject(..) // 
+							return CompletableFuture.completeFuture(phoneNumber)
+						
+						}
+
+					}
+				call this services from controller
+				
+					@RestController
+					public class EmployeeController{
+						
+						@Autowired
+						private AsyncService asyncService;
+						
+						public void testAsync(){
+							CompletableFuture<EmployeeAddresses> employeeAddress = asyncService.getEmployeeAddress();
+							CompletableFuture<PhoneNumber> phoneNumbers = getPhoneNumbers.getEmployeeName();
+							
+							/It will wait until all they done
+							CompletableFuture.allOf(employeeAddress,phoneNumbers).join()
+							
+						}
+						
+					}
+					
+			To override the default async behavior such as thread pool and timeout, 
+			you can implement the WebMvcConfigurer interface and override it’s configureAsyncSupport() method.
+			
+				@SpringBootApplication
+				public class SpringTestApp implements WebMvcConfigurer{
+					
+					....................
+					...................
+					public void configureAsyncSupport(AsyncSupportConfigurer configurer){
+						configurer.setTaskExecutor(mvcTaskExecutor());
+						configurer.setDefaultTimeout(30_000);
+					}
+					
+					@Bean
+					public ThreadPoolTaskExecutor mvcTaskExecutor() {
+						ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+						taskExecutor.setThreadNamePrefix("mvc-task-");
+						return taskExecutor;
+					}
+				
+				}
+			
+			
+		SseEmitter
+		----------
+			Specialization of ResponseBodyEmitter for sending Server-side events
+			It can deliver events from the server to clien
+			Content-type headeer should be text/event-stream
+			It has four fields
+				Id		:	Id of event
+				event	:	type of event
+				data	:	event data
+				retry	:	reconnection time for the event stream
+				
+			create an instance of emitter
+				SseEmitter emitter = new SseEmitter();
+			use send method to send data
+				emitter.send();
+			once you done call complete() to complete service call
+				emitter.complete()
+				
+					@GetMapping("/emit-data-sets")
+					public SSeEmitter fetchData(){
+						SseEmitter emitter = new SseEmitter();
+							//fetch data from other service or db call
+							ExecutorService executor = Executors.newSingleThreadExecutor();
+							
+							List<Employee> empList = getAllEmployees();
+							executor.execute( () ->{
+								try{
+									for(Employee emp : empList){
+										emitter.send(emp);
+									}
+									emitter.complete();
+								}
+								catch(Exception e){
+									emitter.completeWithError();
+								}
+							});
+						}
+					
+		ResponseBodyEmitter
+		-------------------
+			Helps to collect and send the response to the client.
+			While DeferredResult is used to produce a single result, a ResponseBodyEmitter can be used to send multiple objects where each object is written with a compatible HttpMessageConverter
+				
+			
+					@GetMapping("getEmployeesByStream")
+					public ResponseBodyEmitter getEmployeesByStream(){
+						ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+						List<EmployeeEntity> empEntities = empService.getAllEmployees();
+						ExecutorService executor = Executors.newSingleThreadExecutor();
+						List<EmployeeEntity> subList = new ArrayList<>();
+						executor.execute(() ->{
+							try{
+								
+								for(EmployeeEntity employeeEntity : empEntities){
+									if(subList.size() ==5){
+										emitter.send(subList);
+										subList.clear();
+										Thread.sleep(2000);
+									}
+									subList.add(employeeEntity);
+									
+								}
+								if(subList.size() !=0){
+									emitter.send(subList);
+								}
+								emitter.complete();
+							}
+							catch(Exception e){
+								e.printStackTrace();
+								emitter.completeWithError(e);
+							}
+						});
+						executor.shutdown();
+						return emitter;
+					}
+	
+				
+21-04-2020
+----------
+	
+	Spring RestTemplate
+	--------------------
+		Accessing a third party REST services inside a spring application revolves around the use of spring RestTemplate class
+		Like other template classes(JdbcTemplate, JmsTemplate etc.,) RestTemplate is also designed with same principles.
+		This will provide a simplify approach with default behavior for complex tasks
+		
+		RestTemplate class is designed to call Rest services. 
+		We can use all Restful Http methods HEAD, GET, POST, DELETE, OPTIONS, PUT
+		
+		getForObject(url, classType): Execute the given url  returns the object of provided class type
+		
+		getForEntity(url, responseType): 
+		
+		exchange(RequestEntity, responseType)
+		
+		exchange(url, httpMethod, requestCallback, responseExtractor)
+		
+		same like other http methods available
+		
+	Spring ExceptionHandler
+	-----------------------
+		
+		@ControllerAdvice is a specialization annotation of @Component which allows to handle exceptions across the whole application into one
+		global handling component. It can be viewed as an interceptor of exceptions throws by methods of @RequestMapping methods 
+		
+		
+		ResponseEntityExceptionHandler class provides a centralized exception handling across all @RequestMapping methods through @ExceptionHandler methods
+		
+			@ExceptionHandler(RecordNotFoundException.class)
+			public ResponseEntity<Object> handleRecordNotFoundException(Exception ex, WebRequest request){
+				//ResponseEntity<Object> respEntity= new ResponseEntity();
+				return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+			}
+		
+22-04-2020
+----------
+	How to implement custom annotation?
+		
+		
+		
+24-04-2020
+----------
+	Spring security
+	---------------
+		
+		what spring security can do?
+			
+			User name/ password authentication
+			SSO/ Okta/ LDAP
+			App level authorization
+			Intra App authorization like OAuth
+			Microservices security( Using tokens, JWT)
+			Method level security
+			
+		
