@@ -5,7 +5,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 import com.example.SpringBootJPA.service.EmployeeService;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 @RestController
 public class EmployeeController {
 
@@ -31,9 +37,15 @@ public class EmployeeController {
 	}
 	
 	@PutMapping("saveEmployee")
-	public EmployeeEntity saveEmployee(@RequestBody EmployeeEntity empEntity){
+	public ResponseEntity<EmployeeEntity> saveEmployee(@Valid @RequestBody EmployeeEntity empEntity, BindingResult result){
+		if(result.hasErrors()){
+			List<ObjectError> errors = result.getAllErrors();
+			for(ObjectError error: errors){
+				throw new RuntimeException(error.getDefaultMessage());
+			}
+		}
 		empService.saveEmployee(empEntity);
-		return empEntity;
+		return new ResponseEntity(empEntity, HttpStatus.OK) ;
 	}
 	
 	@GetMapping("getEmployeesByDepartment")
@@ -47,8 +59,9 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("getEmployee")
-	public EmployeeEntity getEmployee(@RequestParam("employeeId") Long empId){
-		return empService.getEmployee(empId);
+	public ResponseEntity<EmployeeEntity> getEmployee(@RequestParam("employeeId") Long empId){
+		EmployeeEntity empEntity = empService.getEmployee(empId);
+		return new ResponseEntity(empEntity,HttpStatus.OK);
 	}
 	
 	@GetMapping("getEmployeesByStream")
