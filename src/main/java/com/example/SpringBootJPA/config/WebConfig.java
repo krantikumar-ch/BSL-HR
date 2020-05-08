@@ -12,9 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
 	private HandlerInterceptor handlerInterceptor;
 
 
-	@Override
+	/*@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(handlerInterceptor);
-	}
+	}*/
 
 }
