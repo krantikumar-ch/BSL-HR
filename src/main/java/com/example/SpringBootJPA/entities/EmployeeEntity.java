@@ -13,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.SpringBootJPA.annotations.UniqueChild;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,7 +23,6 @@ import lombok.ToString;
 @Getter @Setter @ToString
 @UniqueChild(uniqueKeys={"firstName","departmentId"}, primaryKey="employeeId", message="First Name already Exists. Try Some other")
 public class EmployeeEntity {
-
 	@Id @Column(name="EMPLOYEE_ID")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="empSeq")
 	@SequenceGenerator(name="empSeq", sequenceName="EMPLOYEES_SEQ", allocationSize=1)

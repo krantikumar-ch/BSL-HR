@@ -11,7 +11,8 @@ import com.example.SpringBootJPA.entities.DepartmentEntity;
 import com.example.SpringBootJPA.service.DepartmentService;
 
 @RestController
-public class DepartmentController {
+public class DepartmentController //extends AutowiredAnnotationBeanPostProcessor
+{
 
 	@Autowired
 	private DepartmentService deptService;
