@@ -1,4 +1,4 @@
-package com.example.SpringBootJPA.dao;
+package com.example.SpringBootJPA.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
 
-	List<UsersEntity> findByUserName(String username);
+	List<UsersEntity> findByUserNameIgnoreCase(String username);
+		
 }

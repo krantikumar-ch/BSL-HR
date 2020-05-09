@@ -7,12 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 
 @Entity @Table(name="USERS")
-@Getter @Setter
+@Getter @Setter @ToString
 public class UsersEntity {
 
 	@Id @Column(name="USER_ID")
@@ -31,4 +34,11 @@ public class UsersEntity {
 	
 	@Column(name="PASSWORD")
 	private String password;
+	
+	@Column(name="email")
+	private String email;
+	
+	@Transient
+	private Boolean activeLink;
+	
 }

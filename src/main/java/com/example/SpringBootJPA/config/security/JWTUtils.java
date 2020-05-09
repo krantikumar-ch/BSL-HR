@@ -61,5 +61,14 @@ public class JWTUtils {
 		return claims;
 	}
 	
+	public static final String createActiveToken(Long userId, String userName){
+		
+		JwtBuilder builder =  Jwts.builder().setId(userId+"")
+	    		.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+	    		.setIssuer(userName).setIssuedAt(new Date(System.currentTimeMillis()));
+		return builder.compact();
+		
+	}
+	
 	
 }

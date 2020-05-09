@@ -38,7 +38,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		System.out.println("Http configure "+endPoints);
+		
 		http.csrf().disable()
 		.authorizeRequests()
 		.antMatchers(endPoints.split(",")).permitAll() // exclude this from our security
@@ -47,6 +47,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		// add our filter here
 		http.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+		
 	}
 
 	@Override

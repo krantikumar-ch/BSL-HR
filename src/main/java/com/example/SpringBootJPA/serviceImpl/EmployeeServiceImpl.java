@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.example.SpringBootJPA.dao.EmployeeRepository;
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 import com.example.SpringBootJPA.exceptions.RecordNotFoundException;
+import com.example.SpringBootJPA.repositories.EmployeeRepository;
 import com.example.SpringBootJPA.service.EmployeeService;
 
 @Service
