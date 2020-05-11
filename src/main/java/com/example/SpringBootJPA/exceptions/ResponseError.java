@@ -1,4 +1,4 @@
-package com.example.SpringBootJPA.config.security;
+package com.example.SpringBootJPA.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
