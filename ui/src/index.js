@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
-import App from './App';
+import App from './js/main/App';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import './index.css';
+import './styles/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
