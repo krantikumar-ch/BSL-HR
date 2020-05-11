@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap'; 
 import {toast} from 'react-toastify';
-import axios from 'axios';
-import endPoints from './../config/endpoints';
+import http from './../config/httpService';
 
 import './../../styles/login.css';
-
 
 class Login extends Component {
     state = {  
@@ -30,9 +28,9 @@ class Login extends Component {
        if(emptyName || emptyPassword){    
            return;
        }
-       const { USER_LOGIN_API } = endPoints;
        try{
-            const promise = await axios.post(USER_LOGIN_API,{userName,password});
+           const {post, getServiceUrl} =http;
+            const promise = await post(getServiceUrl("authenticate"),{userName,password});
             localStorage.setItem("authToken",promise.data);
             this.props.history.replace("/home");
        }

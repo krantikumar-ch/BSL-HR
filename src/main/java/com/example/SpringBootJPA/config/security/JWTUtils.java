@@ -38,8 +38,6 @@ public class JWTUtils {
 	    Map<String, Object> claims = new HashMap<>();
 	    claims.put("userId",user.getUserId());
 	    claims.put("userName",user.getUserName());
-	    claims.put("isAdmin",true);
-	    claims.put("domainAccess", Arrays.asList("read","write"));
 	    
 	    JwtBuilder builder =  Jwts.builder().setId(user.getUserId()+"")
 	    		.setClaims(claims).signWith(SignatureAlgorithm.HS256, SECRET_KEY)

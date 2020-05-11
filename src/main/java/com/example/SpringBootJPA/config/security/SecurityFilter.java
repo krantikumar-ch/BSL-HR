@@ -58,7 +58,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 			
 			String userName = (String)claims.get("userName");
 			request.addHeader("userName", userName);
-			request.addHeader("userId", (String)claims.get("userId"));
+			request.addHeader("userId", claims.get("userId").toString());
 			SecurityContext ctx = SecurityContextHolder.getContext();
 			
 			if(userName != null && ctx.getAuthentication() == null){
