@@ -1,0 +1,5 @@
+Below url to build spring boot with react prod application 
+  https://blogg.kantega.no/webapp-with-create-react-app-and-spring-boot/
+  
+create react app example url
+  https://create-react-app.dev/docs/getting-started
