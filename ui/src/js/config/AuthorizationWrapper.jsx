@@ -17,7 +17,7 @@ export default  function requireAuthentication(WrapperComponent, rest){
             const {post,getServiceUrl} = httpService;
             const url =getServiceUrl(`checkpageAcess${this.props.location.pathname}`)
             try{
-                const response = await post(url);
+                await post(url);
                 this.setState({loading:false})
             }
             catch(error){

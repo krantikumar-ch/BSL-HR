@@ -5,9 +5,10 @@ import { BrowserRouter } from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import App from './js/main/App';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import "font-awesome/css/font-awesome.css";
+import 'react-toastify/dist/ReactToastify.css';
+
 import './styles/index.css';
 
 ReactDOM.render(
@@ -15,7 +16,6 @@ ReactDOM.render(
     <BrowserRouter>
       <App />
       <ToastContainer
-        autoClose={false}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

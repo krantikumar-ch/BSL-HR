@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Form, Button, Spinner} from 'react-bootstrap'; 
+import {Form, Button} from 'react-bootstrap'; 
 import {toast} from 'react-toastify';
-import http from './../config/httpService';
+import http from '../config/httpService';
 
 import './../../styles/login.css';
+
 
 class Login extends Component {
     state = {  
@@ -14,7 +15,7 @@ class Login extends Component {
     }
 
     componentDidMount(){
-        sessionStorage.removeItem("authToken")
+        sessionStorage.clear();
     }
 
     handleChange = (event) =>{
@@ -34,8 +35,8 @@ class Login extends Component {
        }
        try{
            const {post, getServiceUrl} =http;
-            const promise = await post(getServiceUrl("authenticate"),{userName,password});
-            sessionStorage.setItem("authToken",promise.data);
+            const {data} = await post(getServiceUrl("authenticate"),{userName,password});            
+            Object.keys(data).forEach(key =>  sessionStorage.setItem(key,data[key]) );
             this.props.history.replace("/home");
        }
        catch(error){

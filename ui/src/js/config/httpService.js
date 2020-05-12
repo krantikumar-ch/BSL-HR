@@ -3,7 +3,7 @@ import axios from 'axios';
 //axios.defaults.headers.common["authToken"] = localStorage.getItem("authToken"); 
 
  axios.interceptors.request.use(config =>{
-     if(config.url .indexOf("/authenticate") ===-1){
+     if(config.url.indexOf("/authenticate") ===-1){
         config.headers["authToken"] = sessionStorage.getItem("authToken");
      }
      else{

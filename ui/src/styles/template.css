@@ -1,10 +1,11 @@
+
 .side-nav{
     position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
     height: 100%;
     width: 75px;     /* Set the width of the sidebar */
     z-index: 1;      /* Stay on top of everything */
-    top: 3.4em;      /* Stay at the top */
-    background-color: #1C8EF9; /* Black */
+    top: 50px;      /* Stay at the top */
+    background-color: #3c95f5;
     overflow-x: hidden;     /* Disable horizontal scroll */
     padding-top: 10px;
     /* background: #1C8EF9 !important; */
@@ -13,20 +14,47 @@
 
 .styled-nav-item{
 
-    height: 70px;
+    height: 140px;
     width: 75px; /* width must be same size as NavBar to center */
     text-align: center; /* Aligns <a> inside of NavIcon div */
     margin-bottom: 0;   /* Puts space between NavItems */
+    padding-top: 0px;
     
-    
+}
+
+.styled-nav-item .styled-nav-label{
+    font-size: 12px;
+    color: white;
+    position: relative;
+    top: -15px;
+    cursor: pointer;
 }
 
 .styled-nav-item a {
     font-size: 48px;
-    color: #9FFFCB;
+    color: white;
 }
 
 .styled-nav-item a:hover {
     opacity: 0.7;
     text-decoration: none; /* Gets rid of underlining of icons */
-}  
+}
+
+.nav-header{color: white;
+    background-color: #3c95f5;
+    height: 50px;
+    box-sizing: border-box;
+    padding-top: 10px;
+}
+.nav-header .nav-logo{
+    font-size: 25px;
+    font-weight: bolder;
+    padding-left: 30px;
+}
+.user-info{
+    float: right;
+    font-size: 23px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+  

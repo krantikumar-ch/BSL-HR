@@ -1,11 +1,18 @@
 import React from 'react';
-import BaseComponent from './../common/BaseComponent';
-import NavBar from './../common/NavBar';
+import PageTemplate from '../common/pageTemplate';
 
-class Home extends BaseComponent {
+
+class Home extends React.Component {
     state = {  }
     render() { 
-       return <NavBar/>
+       return (
+           <div >
+               <PageTemplate {...this.props} />
+               <div className="router-main-content">
+                <h1>Home</h1>
+               </div>
+           </div>
+       )
     }
 }
  
