@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Row, Col, Form, FormControl } from 'react-bootstrap';
 
-class navBar extends Component {
+class NavBar extends Component {
     logout = ()=>{
       this.props.history.replace("/")
     }
