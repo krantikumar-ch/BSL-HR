@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {toast} from 'react-toastify';
-import httpService from './httpService';
+import http from './httpService';
 
 
 
@@ -14,10 +14,9 @@ export default  function requireAuthentication(WrapperComponent, rest){
         }
 
         async componentDidMount(){
-            const {post,getServiceUrl} = httpService;
-            const url =getServiceUrl(`checkpageAcess${this.props.location.pathname}`)
+            const url =`/checkpageAcess${this.props.location.pathname}`;
             try{
-                await post(url);
+                await http.post(url);
                 this.setState({loading:false})
             }
             catch(error){

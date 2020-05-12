@@ -34,8 +34,7 @@ class Login extends Component {
            return;
        }
        try{
-           const {post, getServiceUrl} =http;
-            const {data} = await post(getServiceUrl("authenticate"),{userName,password});            
+            const {data} = await http.post("/authenticate",{userName,password});            
             Object.keys(data).forEach(key =>  sessionStorage.setItem(key,data[key]) );
             this.props.history.replace("/home");
        }
