@@ -7,6 +7,7 @@ import App from './js/main/App';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import "font-awesome/css/font-awesome.css";
 import './styles/index.css';
 
 ReactDOM.render(

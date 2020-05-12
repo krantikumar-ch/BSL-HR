@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
+import BaseComponent from './../common/BaseComponent';
+import NavBar from './../common/NavBar';
 
-class Home extends Component {
+class Home extends BaseComponent {
     state = {  }
     render() { 
-       return <h1>Home</h1>
+       return <NavBar/>
     }
 }
  

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +40,11 @@ public class SecurityController {
 		}
 		
 		return ResponseEntity.ok(JWTUtils.createJWT(user));	
+	}
+	
+	@PostMapping("/checkpageAcess/{page}")
+	public ResponseEntity<Boolean> checkPageAccess(@PathVariable(name="page") String pageName){
+		System.out.println("page name "+pageName);
+		return ResponseEntity.ok(true);
 	}
 }

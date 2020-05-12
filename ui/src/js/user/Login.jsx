@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Button} from 'react-bootstrap'; 
+import {Form, Button, Spinner} from 'react-bootstrap'; 
 import {toast} from 'react-toastify';
 import http from './../config/httpService';
 
@@ -12,7 +12,11 @@ class Login extends Component {
         emptyName:false,
         emptyPassword:false,
     }
-    ;
+
+    componentDidMount(){
+        sessionStorage.removeItem("authToken")
+    }
+
     handleChange = (event) =>{
         const state = this.state;
         state[event.target.name] = event.target.value;
@@ -31,7 +35,7 @@ class Login extends Component {
        try{
            const {post, getServiceUrl} =http;
             const promise = await post(getServiceUrl("authenticate"),{userName,password});
-            localStorage.setItem("authToken",promise.data);
+            sessionStorage.setItem("authToken",promise.data);
             this.props.history.replace("/home");
        }
        catch(error){
@@ -46,7 +50,7 @@ class Login extends Component {
         const{userName, password, emptyName, emptyPassword} = this.state;
        return(
            <div className="login">
-            <div className="login-main">
+                <div className="login-main">
                     <h1 className="login-header">Sign In</h1>
                     <Form >
                         <Form.Group controlId="formBasicEmail">
