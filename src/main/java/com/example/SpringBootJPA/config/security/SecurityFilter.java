@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.SpringBootJPA.exceptions.ResponseError;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -57,7 +58,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 			
 			String userName = (String)claims.get("userName");
 			request.addHeader("userName", userName);
-			request.addHeader("userId", (String)claims.get("userId"));
+			request.addHeader("userId", claims.get("userId").toString());
 			SecurityContext ctx = SecurityContextHolder.getContext();
 			
 			if(userName != null && ctx.getAuthentication() == null){
@@ -86,7 +87,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		ResponseError error = new ResponseError(HttpServletResponse.SC_UNAUTHORIZED, 
-				"UnAuthorized User / Session Expired", "");
+				"UnAuthorized User / Session Expired", "UnAuthorized User / Session Expired");
 		
 		String responseString = new ObjectMapper().writeValueAsString(error);
 		
