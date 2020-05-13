@@ -1,0 +1,7 @@
+.common-custom-alert-banner{
+    margin-left: 75px;
+    margin-top: 3px;
+    position: absolute !important;
+    width: 93%;
+    z-index: 101;
+}

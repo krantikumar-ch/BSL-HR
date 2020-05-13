@@ -1,0 +1,6 @@
+.department-list{
+    padding: 20px 0px 20px 0px;
+    height:450px;
+    text-align:center;
+    overflow:auto;
+}

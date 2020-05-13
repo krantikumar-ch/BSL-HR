@@ -4,6 +4,7 @@ import { Row, Col, Form, FormControl} from 'react-bootstrap';
 import Table from './../common/table';
 import PageTemplate from './../common/pageTemplate';
 import http from './../config/httpService';
+import AlertBanner,{Types} from './../common/alert-banner';
 
 import './../../styles/employees.css';
 
@@ -64,8 +65,32 @@ class Employees extends Component {
     
     ]
         this.state = {
-            empData:[]
+            empData:[],
+            showAlertBanner:false,
+            bannerMsg:'',
+            type:'',
+            timeOut:0,
         }
+    }
+    async componentDidMount(){
+        try{
+            const response = await http.get("/employee/getAllEmployees");
+            this.employeeData = [...response.data];
+            this.setState({empData:[...response.data]});
+        }
+        catch(error){
+            console.log("error", error.response);
+            if(error.response){
+                const {data} =error.response;
+                const message = data.description ? data.description : data.message;
+                this.showAlertBanner(message, Types.ERROR);
+            }
+            
+        }
+    }
+
+    showAlertBanner = (messaage, type, timeOut=0)=>{
+        this.setState({showAlertBanner:true,bannerMsg:messaage,type,timeOut});
     }
     handleSelectAll = (event)=>{
         const empData = [...this.employeeData];
@@ -96,22 +121,23 @@ class Employees extends Component {
         console.log("handleDelete employeeItem",employeeItem);
     }
 
-    async componentDidMount(){
-        try{
-            const response = await http.get("/employee/getAllEmployees");
-            this.employeeData = [... response.data];
-            this.setState({empData:[... response.data]});
-        }
-        catch(error){
-            console.log("error");
-        }
-    }
     
+
+    onAlertBannerClose = ()=>{
+        this.setState({showAlertBanner:false})
+    }
+
     render() { 
-        const {empData} = this.state;
+        const {empData, showAlertBanner, bannerMsg, type, timeOut} = this.state;
        return (
         <div >
             <PageTemplate {...this.props} />
+            
+            <AlertBanner message={bannerMsg} 
+                showBanner={showAlertBanner} 
+                type={type} onClose={this.onAlertBannerClose} 
+                timeOut={timeOut}/>
+
             <div className="router-main-content emp-main">
                 <div className="emp-main-header">
                 <Row>
