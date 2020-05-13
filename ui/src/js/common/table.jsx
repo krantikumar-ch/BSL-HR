@@ -20,6 +20,7 @@ class CustomTable extends Component {
         )
     }
     renderCell = (item,column) =>{
+
         if(column.columnContent){
             return column.columnContent(item);
         }
@@ -52,7 +53,7 @@ class CustomTable extends Component {
         return <tbody>{tableColumns}</tbody>
     }
     render() { 
-        const {columns, primaryKey='employeeId', data, style={}} = this.props;
+        const {style={}} = this.props;
         return (
             <Table striped bordered hover size="sm" style={style}>
                 {this.renderHeader()}
@@ -61,10 +62,12 @@ class CustomTable extends Component {
         );
     }
 }
+
 CustomTable.propTypes ={
     columns: PropTypes.array.isRequired,
     primaryKey: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
     style: PropTypes.object,
 }
+
 export default CustomTable;

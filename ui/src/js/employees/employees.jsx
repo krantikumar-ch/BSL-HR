@@ -106,6 +106,7 @@ class Employees extends Component {
             console.log("error");
         }
     }
+    
     render() { 
         const {empData} = this.state;
        return (
