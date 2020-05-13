@@ -42,7 +42,7 @@ public class JWTUtils {
 	    JwtBuilder builder =  Jwts.builder().setId(user.getUserId()+"")
 	    		.setClaims(claims).signWith(SignatureAlgorithm.HS256, SECRET_KEY)
 	    		.setIssuer(user.getUserName()).setIssuedAt(new Date(nowMillis))
-	    		.setExpiration(new Date(expMillis));
+	    		/*.setExpiration(new Date(expMillis))*/;
 	    return builder.compact();
 
 	    

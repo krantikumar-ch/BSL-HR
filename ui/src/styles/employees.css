@@ -1,0 +1,23 @@
+.emp-main{
+    padding-top: 40px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+.emp-icons{
+    font-size: 23px;
+    padding-left: 10%;
+}
+.emp-icon{
+    cursor: pointer;
+    margin-left: 5%;
+}
+.emp-list{
+    padding: 20px 0px 20px 0px;
+    height:450px;
+    text-align:center;
+    overflow:auto;
+}
+.employee-cell-icon{
+    text-align: center;
+    cursor: pointer;
+}

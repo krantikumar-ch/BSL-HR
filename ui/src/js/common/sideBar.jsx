@@ -26,7 +26,7 @@ class SideBar extends Component {
           path: '/users',
           name: 'User',
           css: 'fa fa-fw fas  fa-user',
-          key: 3
+          key: 4
         },
       ]
 
@@ -39,8 +39,8 @@ class SideBar extends Component {
                 
                 {this.items.map(item =>{
                     return (
-                    <div className='styled-nav-item'>
-                      <Link key={item.key} to={item.path} title={item.name} > 
+                    <div className='styled-nav-item' key={item.key}>
+                      <Link  to={item.path} title={item.name} > 
                           <i className={item.css}></i>
                         </Link>
                         <span className="styled-nav-label" onClick={() => this.handleLabelNavigation(item)}>{item.name}</span>
