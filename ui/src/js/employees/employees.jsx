@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, FormControl} from 'react-bootstrap';
 
-import Table from './../common/table';
 import PageTemplate from './../common/pageTemplate';
 import http from './../config/httpService';
 import AlertBanner,{Types} from './../common/alert-banner';
+import PaginationTable from './../common/pagination-table';
 
 import './../../styles/employees.css';
+
 
 class Employees extends Component {
     
@@ -70,13 +71,14 @@ class Employees extends Component {
             bannerMsg:'',
             type:'',
             timeOut:0,
+            pageNumber:1
         }
     }
     async componentDidMount(){
         try{
             const response = await http.get("/employee/getAllEmployees");
             this.employeeData = [...response.data];
-            this.setState({empData:[...response.data]});
+            this.setState({empData:this.employeeData});
         }
         catch(error){
             console.log("error", error.response);
@@ -127,8 +129,12 @@ class Employees extends Component {
         this.setState({showAlertBanner:false})
     }
 
+    handlePageChange = (pageNumber, countPages) =>{
+        this.setState({pageNumber})
+    }
+
     render() { 
-        const {empData, showAlertBanner, bannerMsg, type, timeOut} = this.state;
+        const {empData, showAlertBanner, bannerMsg, type, timeOut,pageNumber} = this.state;
        return (
         <div >
             <PageTemplate {...this.props} />
@@ -140,25 +146,27 @@ class Employees extends Component {
 
             <div className="router-main-content emp-main">
                 <div className="emp-main-header">
-                <Row>
-                    <Col lg={2}>
-                        <div className ="emp-icons">
-                            <i className="fa fa-fw  fa-plus-square emp-icon" aria-hidden="true" title="Create"></i>
-                            <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export As Excel"></i>
-                            <i className="fa fa-fw  fa-trash emp-icon" aria-hidden="true" title="Delete"></i>
-                        </div>
-                    </Col>
-                    <Col lg={4}>
-                    <Form className="form-center">
-                        <FormControl type="text" placeholder="Search" className="" />
-                    </Form>
-                    </Col>
+                    <Row>
+                        <Col lg={2}>
+                            <div className ="emp-icons">
+                                <i className="fa fa-fw  fa-plus-square emp-icon" aria-hidden="true" title="Create"></i>
+                                <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export As Excel"></i>
+                                <i className="fa fa-fw  fa-trash emp-icon" aria-hidden="true" title="Delete"></i>
+                            </div>
+                        </Col>
+                        <Col lg={4}>
+                        <Form className="form-center">
+                            <FormControl type="text" placeholder="Search By First Name" className="" />
+                        </Form>
+                        </Col>
 
-                </Row>
+                    </Row>
                 </div>
-                <div className="emp-list">
-                    <Table data={empData} columns={this.columns} primaryKey="employeeId" />
-                </div>
+                <PaginationTable 
+                    columns={this.columns} 
+                    data={empData} primaryKey={"employeeId"} currentPage={pageNumber}
+                    onPageChange={this.handlePageChange}
+                />
             </div>
         </div>
        );
