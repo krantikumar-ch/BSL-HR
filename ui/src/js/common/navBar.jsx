@@ -15,7 +15,7 @@ class NavBar extends Component {
             </div>
         </Col>
         <Col lg={6}>
-          <Form className="form-center">
+          <Form className="form-center" onSubmit={(event)=> event.preventDefault()}>
             <FormControl type="text" placeholder="Search" className="" />
           </Form>
         </Col>

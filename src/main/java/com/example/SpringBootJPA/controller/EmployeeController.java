@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
+import com.example.SpringBootJPA.dto.EmployeePageResponse;
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 import com.example.SpringBootJPA.service.EmployeeService;
 
@@ -37,7 +38,6 @@ public class EmployeeController {
 	
 	@GetMapping("getAllEmployees")
 	public List<EmployeeEntity> getAllEmployees(@RequestHeader(name="userName") String userName){
-		System.out.println("username "+userName);
 		return empService.getAllEmployees();
 	}
 
@@ -109,5 +109,14 @@ public class EmployeeController {
 		});
 		executor.shutdown();
 		return emitter;
+	}
+	
+	@GetMapping("getEmployeesByPage/{pageNumer}")
+	public EmployeePageResponse getEmployeesByPage(
+			@PathVariable(name="pageNumer") Integer pageNumber,
+			@RequestParam(name="search",required=false) String search){
+		
+		return empService.getEmployeeByPage(pageNumber, search);
+		
 	}
 }

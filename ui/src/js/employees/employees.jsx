@@ -71,23 +71,32 @@ class Employees extends Component {
             bannerMsg:'',
             type:'',
             timeOut:0,
-            pageNumber:1
+            currentPage:1,
+            pageSize:20,
+            totalPages:1,
+            searchValue:''
         }
     }
-    async componentDidMount(){
+    componentDidMount(){
+        this.loadEmployeeData(1);
+    }
+
+    loadEmployeeData = async(pageNumber, searchValue="")=>{  
         try{
-            const response = await http.get("/employee/getAllEmployees");
-            this.employeeData = [...response.data];
-            this.setState({empData:this.employeeData});
+            let url=`/employee/getEmployeesByPage/${pageNumber}`;
+            if(searchValue.trim() !== ''){
+                url = `${url}?search=${searchValue}`
+            }
+            const {data} = await http.get(url);
+            const {employees,pageSize,totalPages,count} = data
+            this.setState({empData:employees,pageSize, totalPages})
         }
         catch(error){
-            console.log("error", error.response);
             if(error.response){
                 const {data} =error.response;
                 const message = data.description ? data.description : data.message;
                 this.showAlertBanner(message, Types.ERROR);
             }
-            
         }
     }
 
@@ -123,18 +132,32 @@ class Employees extends Component {
         console.log("handleDelete employeeItem",employeeItem);
     }
 
-    
-
     onAlertBannerClose = ()=>{
         this.setState({showAlertBanner:false})
     }
 
     handlePageChange = (pageNumber, countPages) =>{
-        this.setState({pageNumber})
+        this.loadEmployeeData(pageNumber);
+        this.setState({currentPage: pageNumber})
+    }
+
+    handleSearch = (event) =>{
+        event.preventDefault();
+        const {value} = event.target;
+        if(value.trim() !== '' && value.trim().length >=3){
+            this.loadEmployeeData(1,value);
+            this.setState({currentPage:1})
+        }
+        if(value === ''){
+            this.loadEmployeeData(1);
+            this.setState({currentPage:1})
+        }
+        this.setState({searchValue:value});
     }
 
     render() { 
-        const {empData, showAlertBanner, bannerMsg, type, timeOut,pageNumber} = this.state;
+        const {empData, showAlertBanner, bannerMsg, 
+            type, timeOut,currentPage,totalPages, searchValue} = this.state;
        return (
         <div >
             <PageTemplate {...this.props} />
@@ -155,17 +178,19 @@ class Employees extends Component {
                             </div>
                         </Col>
                         <Col lg={4}>
-                        <Form className="form-center">
-                            <FormControl type="text" placeholder="Search By First Name" className="" />
-                        </Form>
+                            <input type="text" className="form-control"  
+                                onChange={this.handleSearch} 
+                                value={searchValue} placeholder="Search By First Name"/>
+                        
                         </Col>
 
                     </Row>
                 </div>
                 <PaginationTable 
                     columns={this.columns} 
-                    data={empData} primaryKey={"employeeId"} currentPage={pageNumber}
-                    onPageChange={this.handlePageChange}
+                    data={empData} primaryKey={"employeeId"} currentPage={currentPage}
+                    onPageChange={this.handlePageChange} totalPages={totalPages} 
+                    asyncData={true}
                 />
             </div>
         </div>

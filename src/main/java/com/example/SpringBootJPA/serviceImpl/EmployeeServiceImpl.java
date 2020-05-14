@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.util.StringUtils;
 
+import com.example.SpringBootJPA.dto.EmployeePageResponse;
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 import com.example.SpringBootJPA.exceptions.RecordNotFoundException;
 import com.example.SpringBootJPA.repositories.EmployeeRepository;
@@ -49,6 +51,38 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<EmployeeEntity> getEmployeesByDepartment(Long deptId) {
 		return empRepository.findByLastName(deptId);
+	}
+	
+	@Override
+	public EmployeePageResponse getEmployeeByPage(int pageNumber, String searchValue){
+		
+		int pageSize= 20;
+		Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+		List<EmployeeEntity> empList = null;
+		Long totalRecords = null;
+		
+		if(!StringUtils.isEmpty(searchValue)){
+			String search ="%"+searchValue+"%";
+			empList= empRepository.findByFirstNameIgnoreCaseLike(search, pageable);
+			totalRecords = empRepository.countByFirstNameIgnoreCaseLike(search);
+		}
+		else{
+			empList= empRepository.findAll(pageable).toList();
+			if(totalRecords == null){
+				totalRecords = empRepository.count();
+			}
+			
+		}
+		int totalPages = (int)((totalRecords/pageSize)+
+				(totalRecords%pageSize == 0 ? 0 :1));
+		EmployeePageResponse response= new EmployeePageResponse();
+		response.setEmployees(empList);
+		response.setCount(totalRecords);
+		response.setPageSize(pageSize);
+		response.setTotalPages(totalPages);
+		response.setCurrentPage(pageNumber);
+		return response;
+		 
 	}
 
 }

@@ -12,17 +12,21 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.example.SpringBootJPA.annotations.UniqueChild;
-
-import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity @Table(name="employees")
+
 @Getter @Setter @ToString
+
 @UniqueChild(uniqueKeys={"firstName","departmentId"}, primaryKey="employeeId", message="First Name already Exists. Try Some other")
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class EmployeeEntity {
+	
 	@Id @Column(name="EMPLOYEE_ID")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="empSeq")
 	@SequenceGenerator(name="empSeq", sequenceName="EMPLOYEES_SEQ", allocationSize=1)
