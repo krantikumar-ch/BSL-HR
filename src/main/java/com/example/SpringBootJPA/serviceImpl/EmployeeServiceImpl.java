@@ -6,8 +6,10 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -57,29 +59,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeePageResponse getEmployeeByPage(int pageNumber, String searchValue){
 		
 		int pageSize= 20;
-		Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
-		List<EmployeeEntity> empList = null;
-		Long totalRecords = null;
-		
+		Pageable pageable = PageRequest.of(pageNumber-1, pageSize, 
+							Sort.by("firstName").ascending()); 
+		Page<EmployeeEntity> empPage = null;
 		if(!StringUtils.isEmpty(searchValue)){
 			String search ="%"+searchValue+"%";
-			empList= empRepository.findByFirstNameIgnoreCaseLike(search, pageable);
-			totalRecords = empRepository.countByFirstNameIgnoreCaseLike(search);
+			empPage= empRepository.findByFirstNameIgnoreCaseLike(search, pageable);
 		}
 		else{
-			empList= empRepository.findAll(pageable).toList();
-			if(totalRecords == null){
-				totalRecords = empRepository.count();
-			}
-			
+			empPage= empRepository.findAll(pageable);
 		}
-		int totalPages = (int)((totalRecords/pageSize)+
-				(totalRecords%pageSize == 0 ? 0 :1));
 		EmployeePageResponse response= new EmployeePageResponse();
-		response.setEmployees(empList);
-		response.setCount(totalRecords);
+		response.setEmployees(empPage.toList());
+		response.setCount(empPage.getTotalElements());
 		response.setPageSize(pageSize);
-		response.setTotalPages(totalPages);
+		response.setTotalPages(empPage.getTotalPages());
 		response.setCurrentPage(pageNumber);
 		return response;
 		 
