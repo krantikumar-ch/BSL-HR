@@ -22,7 +22,7 @@ class PaginationTable extends Component {
     }
 
     getPageData = (data, currentPage,pageSize)=>{
-        if(data.length === 0) return data;
+        if(data.length === 0 || data/pageSize <= pageSize) return data;
         const chunkData = _.chunk(data, pageSize);
         return chunkData[currentPage-1];
     }

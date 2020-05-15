@@ -81,8 +81,13 @@ public class EmployeeController {
 	
 	@GetMapping("getEmployeesByStream")
 	public ResponseBodyEmitter getEmployeesByStream(){
-		ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+		
+		/*provide timeout of responsebody emitter or it will take server
+			default timeout. Once it reaches timeout emitter will implicit call complete method
+		*/
+		ResponseBodyEmitter emitter = new ResponseBodyEmitter(180000l); 
 		List<EmployeeEntity> empEntities = empService.getAllEmployees();
+		
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		List<EmployeeEntity> subList = new ArrayList<>();
 		executor.execute(() ->{
@@ -100,6 +105,7 @@ public class EmployeeController {
 				if(subList.size() !=0){
 					emitter.send(subList);
 				}
+				
 				emitter.complete();
 			}
 			catch(Exception e){
