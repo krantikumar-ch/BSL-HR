@@ -72,21 +72,31 @@ class Employees extends Component {
             timeOut:0,
         }
     }
-    async componentDidMount(){
-        try{
-            const response = await http.get("/employee/getAllEmployees");
-            this.employeeData = [...response.data];
-            this.setState({empData:[...response.data]});
-        }
-        catch(error){
-            console.log("error", error.response);
-            if(error.response){
-                const {data} =error.response;
-                const message = data.description ? data.description : data.message;
-                this.showAlertBanner(message, Types.ERROR);
+    
+    componentDidMount(){
+        const url=`/employee/getEmployeesByStream`;
+        let previousResponse = '';
+        http.fetch({
+            url,
+            method:"GET",
+            onDownloadProgress : progressEvent=>{
+                const chunkData =  progressEvent.currentTarget.response;
+
+               if(progressEvent.currentTarget.status !== 200){
+                    const newJson = JSON.parse(chunkData.trim());
+                   this.showAlertBanner(newJson.message, Types.ERROR);
+                   return;
+               }
+                const data = chunkData.substring(previousResponse.length);
+                previousResponse = chunkData;
+                const newJson = JSON.parse(data.trim());
+                const empData = this.state.empData;
+                this.setState({empData:[...empData,...newJson]})
             }
-            
-        }
+        }).then(response => {
+            this.showAlertBanner("Employees data received successfully",Types.SUCCESS);
+        })
+        
     }
 
     showAlertBanner = (messaage, type, timeOut=0)=>{
