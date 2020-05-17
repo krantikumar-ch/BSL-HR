@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.SpringBootJPA.dao.DepartmentRepository;
 import com.example.SpringBootJPA.entities.DepartmentEntity;
+import com.example.SpringBootJPA.repositories.DepartmentRepository;
 import com.example.SpringBootJPA.service.DepartmentService;
 
 @Transactional

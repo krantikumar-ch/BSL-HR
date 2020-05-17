@@ -1,0 +1,20 @@
+.common-custom-alert-banner{
+    margin-left: 75px;
+    margin-top: 3px;
+    position: absolute !important;
+    width: 93%;
+    z-index: 101;
+}
+
+.common-custom-loader-main {
+   
+}
+.custom-common-pagination-table{
+    height:450px;
+    text-align:center;
+    overflow:auto;
+}
+
+.common-custom-pagination-button{
+    margin-left: 2%;
+}

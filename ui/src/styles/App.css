@@ -1,0 +1,13 @@
+.main-content{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  position: absolute;
+}
+
+.router-main-content{
+  width: 100%;
+  height: 92%;
+  padding-left: 100px;
+  padding-bottom: 10px;
+}

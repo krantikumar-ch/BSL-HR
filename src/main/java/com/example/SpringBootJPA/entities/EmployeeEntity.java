@@ -2,28 +2,31 @@ package com.example.SpringBootJPA.entities;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import com.example.SpringBootJPA.annotations.UniqueChild;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name="employees")
-@Getter @Setter
-@ToString
-public class EmployeeEntity {
+@Entity @Table(name="employees")
 
+@Getter @Setter @ToString
+
+@UniqueChild(uniqueKeys={"firstName","departmentId"}, primaryKey="employeeId", message="First Name already Exists. Try Some other")
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class EmployeeEntity {
+	
 	@Id @Column(name="EMPLOYEE_ID")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="empSeq")
 	@SequenceGenerator(name="empSeq", sequenceName="EMPLOYEES_SEQ", allocationSize=1)
@@ -34,8 +37,9 @@ public class EmployeeEntity {
 	
 	@Column(name="LAST_NAME")
 	private String lastName;
-	
+
 	@Column(name="EMAIL")
+	@NotBlank(message="Email is Mandatory")
 	private String email;
 	
 	@Column(name="PHONE_NUMBER")
