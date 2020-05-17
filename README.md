@@ -14,11 +14,11 @@ Features:
   
 Software Requirements
 ----------------------
-  Java8 or More \
-  Node Manager \
-  Oracle database \
-  Eclipse IDE \
-  Vs Code(Optional) 
+    Java8 or More \
+    Node Manager \
+    Oracle database \
+    Eclipse IDE \
+    Vs Code(Optional) 
   
 
 
