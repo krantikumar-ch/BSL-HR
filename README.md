@@ -18,7 +18,8 @@ Software Requirements
   Node Manager \
   Oracle database \
   Eclipse IDE \
-  Vs Code(Optional) \
+  Vs Code(Optional) 
+  
 
 
   
