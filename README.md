@@ -2,7 +2,7 @@
 
 Sample application to demonstrate Employees data with Spring Boot with JWT security and ReactJS as front end
 
-Features:
+Features
 ---------
   1. Spring Security using JWT authentication
   2. Custom Exception Handler to handler exceptions and send to cient
