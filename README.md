@@ -1,6 +1,6 @@
 # BSL-HR
 
-Sample application to demonstrate Oracle HR schema with Spring Boot with JWT security and ReactJS as front end
+Sample application to demonstrate Employees data with Spring Boot with JWT security and ReactJS as front end
 
 Features:
 ---------
@@ -14,12 +14,11 @@ Features:
   
 Software Requirements
 ----------------------
-  Java 8+,
-  Node Manager,
-  Oracle 11g+,
-  Eclipse IDE,
-  Vs Code(Optional),
+  Java8 or More \
+  Node Manager \
+  Oracle database \
+  Eclipse IDE \
+  Vs Code(Optional) \
 
-Steps to Install
------------------
+
   
