@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, FormControl} from 'react-bootstrap';
 
-import Table from './../common/table';
 import PageTemplate from './../common/pageTemplate';
 import http from './../config/httpService';
 import AlertBanner,{Types} from './../common/alert-banner';
+import PaginationTable from './../common/pagination-table';
 
 import './../../styles/employees.css';
+
 
 class Employees extends Component {
     
@@ -70,22 +71,32 @@ class Employees extends Component {
             bannerMsg:'',
             type:'',
             timeOut:0,
+            currentPage:1,
+            pageSize:20,
+            totalPages:1,
+            searchValue:''
         }
     }
-    async componentDidMount(){
+    componentDidMount(){
+        this.loadEmployeeData(1);
+    }
+
+    loadEmployeeData = async(pageNumber, searchValue="")=>{  
         try{
-            const response = await http.get("/employee/getAllEmployees");
-            this.employeeData = [...response.data];
-            this.setState({empData:[...response.data]});
+            let url=`/employee/getEmployeesByPage/${pageNumber}`;
+            if(searchValue.trim() !== ''){
+                url = `${url}?search=${searchValue}`
+            }
+            const {data} = await http.get(url);
+            const {employees,pageSize,totalPages,count} = data
+            this.setState({empData:employees,pageSize, totalPages})
         }
         catch(error){
-            console.log("error", error.response);
             if(error.response){
                 const {data} =error.response;
                 const message = data.description ? data.description : data.message;
                 this.showAlertBanner(message, Types.ERROR);
             }
-            
         }
     }
 
@@ -121,14 +132,32 @@ class Employees extends Component {
         console.log("handleDelete employeeItem",employeeItem);
     }
 
-    
-
     onAlertBannerClose = ()=>{
         this.setState({showAlertBanner:false})
     }
 
+    handlePageChange = (pageNumber, countPages) =>{
+        this.loadEmployeeData(pageNumber);
+        this.setState({currentPage: pageNumber})
+    }
+
+    handleSearch = (event) =>{
+        event.preventDefault();
+        const {value} = event.target;
+        if(value.trim() !== '' && value.trim().length >=3){
+            this.loadEmployeeData(1,value);
+            this.setState({currentPage:1})
+        }
+        if(value === ''){
+            this.loadEmployeeData(1);
+            this.setState({currentPage:1})
+        }
+        this.setState({searchValue:value});
+    }
+
     render() { 
-        const {empData, showAlertBanner, bannerMsg, type, timeOut} = this.state;
+        const {empData, showAlertBanner, bannerMsg, 
+            type, timeOut,currentPage,totalPages, searchValue} = this.state;
        return (
         <div >
             <PageTemplate {...this.props} />
@@ -140,25 +169,29 @@ class Employees extends Component {
 
             <div className="router-main-content emp-main">
                 <div className="emp-main-header">
-                <Row>
-                    <Col lg={2}>
-                        <div className ="emp-icons">
-                            <i className="fa fa-fw  fa-plus-square emp-icon" aria-hidden="true" title="Create"></i>
-                            <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export As Excel"></i>
-                            <i className="fa fa-fw  fa-trash emp-icon" aria-hidden="true" title="Delete"></i>
-                        </div>
-                    </Col>
-                    <Col lg={4}>
-                    <Form className="form-center">
-                        <FormControl type="text" placeholder="Search" className="" />
-                    </Form>
-                    </Col>
+                    <Row>
+                        <Col lg={2}>
+                            <div className ="emp-icons">
+                                <i className="fa fa-fw  fa-plus-square emp-icon" aria-hidden="true" title="Create"></i>
+                                <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export As Excel"></i>
+                                <i className="fa fa-fw  fa-trash emp-icon" aria-hidden="true" title="Delete"></i>
+                            </div>
+                        </Col>
+                        <Col lg={4}>
+                            <input type="text" className="form-control"  
+                                onChange={this.handleSearch} 
+                                value={searchValue} placeholder="Search By First Name"/>
+                        
+                        </Col>
 
-                </Row>
+                    </Row>
                 </div>
-                <div className="emp-list">
-                    <Table data={empData} columns={this.columns} primaryKey="employeeId" />
-                </div>
+                <PaginationTable 
+                    columns={this.columns} 
+                    data={empData} primaryKey={"employeeId"} currentPage={currentPage}
+                    onPageChange={this.handlePageChange} totalPages={totalPages} 
+                    asyncData={true}
+                />
             </div>
         </div>
        );
