@@ -43,3 +43,18 @@ CREATE TABLE "DEPARTMENTS"
 	"LAST_UPDATED_DATE" DATE, 
 	"SUPER_USER" NUMBER(1,0) DEFAULT 0
    ) 
+   
+   --------------------------------------------------------
+--  DDL for Table countries
+--------------------------------------------------------
+
+ CREATE TABLE countries (
+  country_id number(20),
+  iso char(2) NOT NULL,
+  countries_name varchar2(80) NOT NULL,
+  nice_name varchar2(80) NOT NULL,
+  iso3 varchar2(3) DEFAULT NULL,
+  num_code number(6) DEFAULT NULL,
+  phone_code number(5) NOT NULL,
+  PRIMARY KEY (country_id)
+) 
