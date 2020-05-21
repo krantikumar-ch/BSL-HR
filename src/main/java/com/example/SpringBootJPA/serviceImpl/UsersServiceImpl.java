@@ -1,5 +1,6 @@
 package com.example.SpringBootJPA.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,13 +8,17 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringBootJPA.config.security.JWTUtils;
+import com.example.SpringBootJPA.entities.CountriesEntity;
 import com.example.SpringBootJPA.entities.UsersEntity;
 import com.example.SpringBootJPA.exceptions.RecordNotFoundException;
+import com.example.SpringBootJPA.repositories.CountriesRepository;
 import com.example.SpringBootJPA.repositories.UsersRepository;
 import com.example.SpringBootJPA.service.UsersService;
 
@@ -28,6 +33,9 @@ public class UsersServiceImpl implements UsersService {
 	
 	@Autowired
     private JavaMailSender mailSender;
+	
+	@Autowired
+	private CountriesRepository countryRepository;
 	
 	@Override
 	public UsersEntity getUser(String userName) {
@@ -61,6 +69,12 @@ public class UsersServiceImpl implements UsersService {
 		email.setSubject("Sample registration link");
 		email.setText(message+"\r\n"+confirmationUrl);
 		mailSender.send(email);
+	}
+
+	@Override
+	@Cacheable(cacheNames="countries")
+	public List<CountriesEntity> getAllCountries() {
+		return countryRepository.findAll(Sort.by("niceName"));
 	}
 
 }

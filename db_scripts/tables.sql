@@ -50,8 +50,8 @@ CREATE TABLE "DEPARTMENTS"
 
  CREATE TABLE countries (
   country_id number(20),
-  iso char(2) NOT NULL,
-  countries_name varchar2(80) NOT NULL,
+  iso varchar2(2) NOT NULL,
+  name varchar2(80) NOT NULL,
   nice_name varchar2(80) NOT NULL,
   iso3 varchar2(3) DEFAULT NULL,
   num_code number(6) DEFAULT NULL,
