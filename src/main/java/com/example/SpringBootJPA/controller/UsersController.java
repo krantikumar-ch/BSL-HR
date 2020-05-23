@@ -1,10 +1,14 @@
 package com.example.SpringBootJPA.controller;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,5 +37,6 @@ public class UsersController {
 	public List<CountriesEntity> getAllCountries(){
 		return userService.getAllCountries();
 	}
-
+	
+	
 }

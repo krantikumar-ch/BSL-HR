@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -125,4 +127,11 @@ public class EmployeeController {
 		return empService.getEmployeeByPage(pageNumber, search);
 		
 	}
+	
+	@PostMapping("downloadEmployee")
+	public void downloadEmployee(@RequestBody List<Map<String,String>> columns,
+			HttpServletResponse response) throws Exception{
+		empService.downloadEmployee(columns, response);
+	}
+
 }
