@@ -188,11 +188,38 @@ class Employees extends Component {
         });
     }
 
+    handleFileUpload = async (event) =>{
+        const [file] = event.target.files 
+        console.log('handleFileUpload' ,file);
+        const formData = new FormData();
+        formData.append("file",file)
+        this.setState({showLoader: true});
+        try{
+           const {data} = await http.post("/employee/uploadEmployee", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }})
+            if(data.trim() !== '')
+            this.showAlertBanner("File uploaded successfully", Types.SUCCESS);
+        }
+        catch(error){
+            if(error.response){
+                const {data} =error.response;
+                const message = data.description ? data.description : data.message;
+                this.showAlertBanner(message, Types.ERROR);
+            }
+        }
+        finally{
+            this.setState({showLoader: false});
+        }
+    }
+
     render() { 
         const {empData, showAlertBanner, bannerMsg, 
             type, timeOut,currentPage,totalPages, searchValue, showLoader, count} = this.state;
+        const disableClass = showLoader ? "common-disable-all" :  '';
        return (
-        <div >
+        <div className={disableClass}>
             <Loader show={showLoader}/>
             <PageTemplate {...this.props} />
            
@@ -216,6 +243,9 @@ class Employees extends Component {
                                 onChange={this.handleSearch} 
                                 value={searchValue} placeholder="Search By First Name"/>
                         
+                        </Col>
+                        <Col lg={4}>
+                          <input type="file" className="form-control-file" onChange={this.handleFileUpload} />
                         </Col>
 
                     </Row>

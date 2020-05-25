@@ -1,5 +1,9 @@
 package com.example.SpringBootJPA.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import com.example.SpringBootJPA.dto.EmployeePageResponse;
@@ -132,6 +137,16 @@ public class EmployeeController {
 	public void downloadEmployee(@RequestBody List<Map<String,String>> columns,
 			HttpServletResponse response) throws Exception{
 		empService.downloadEmployee(columns, response);
+	}
+	
+	@PostMapping("uploadEmployee")
+	public String uploadEmployee(@RequestParam("file") MultipartFile file) throws IOException{
+		
+		String fileName = file.getOriginalFilename();
+		String filePath ="E:/kranti/workspace/gitspringboot examples/BSL-HR/app_used_files/";
+		Path path = Paths.get(filePath+fileName);
+		Files.write(path, file.getBytes());
+		return fileName;
 	}
 
 }
