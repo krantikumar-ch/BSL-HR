@@ -29,7 +29,7 @@ class CustomTable extends Component {
 
     renderHeaderCell = (column)=>{
         if(column.headerContent){
-            return column.headerContent();
+            return column.headerContent(column);
         }
         return column.label;
     }

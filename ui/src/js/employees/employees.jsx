@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, FormControl} from 'react-bootstrap';
+import { Row, Col} from 'react-bootstrap';
+
 
 import PageTemplate from './../common/pageTemplate';
 import http from './../config/httpService';
 import AlertBanner,{Types} from './../common/alert-banner';
 import PaginationTable from './../common/pagination-table';
+import Loader from './../common/loader';
 
 import './../../styles/employees.css';
 
@@ -13,13 +15,12 @@ class Employees extends Component {
     
     constructor(props){
         super(props);
-        this.employeeData = [];
         this.columns=[
             {
                 name:"checkbox",
-                headerContent: ()=>{
+                headerContent: (column)=>{
                     return(<div className="checkbox">
-                        <input type="checkbox"  onChange ={(event) => this.handleSelectAll(event)}/>
+                        <input type="checkbox"  onChange ={(event) => this.handleSelectAll(event,column)}/>
                     </div>)
                 },
                 columnContent: (employee) => { return (
@@ -74,7 +75,9 @@ class Employees extends Component {
             currentPage:1,
             pageSize:20,
             totalPages:1,
-            searchValue:''
+            searchValue:'',
+            showLoader:false,
+            count:0
         }
     }
     componentDidMount(){
@@ -82,6 +85,8 @@ class Employees extends Component {
     }
 
     loadEmployeeData = async(pageNumber, searchValue="")=>{  
+
+        this.setState({showLoader: true});
         try{
             let url=`/employee/getEmployeesByPage/${pageNumber}`;
             if(searchValue.trim() !== ''){
@@ -89,7 +94,7 @@ class Employees extends Component {
             }
             const {data} = await http.get(url);
             const {employees,pageSize,totalPages,count} = data
-            this.setState({empData:employees,pageSize, totalPages})
+            this.setState({empData:employees,pageSize, totalPages, count})
         }
         catch(error){
             if(error.response){
@@ -98,29 +103,30 @@ class Employees extends Component {
                 this.showAlertBanner(message, Types.ERROR);
             }
         }
+        finally{
+            this.setState({showLoader: false});
+        }
     }
 
     showAlertBanner = (messaage, type, timeOut=0)=>{
         this.setState({showAlertBanner:true,bannerMsg:messaage,type,timeOut});
     }
     handleSelectAll = (event)=>{
-        const empData = [...this.employeeData];
+        const empData = [...this.state.empData];
         empData.forEach(employee =>{
             employee.selected = event.target.checked;
         })
-        this.employeeData = empData;
         this.setState({empData});
     }
     
-    handleSelect = (event, employeeItem)=>{
-        const empData = [...this.employeeData];
+    handleSelect = (event, employeeItem)=>{ 
+        const empData = [...this.state.empData];
         empData.forEach(employee =>{
             if(employee.employeeId === employeeItem.employeeId){
                 employee.selected = event.target.checked;
                 return;
             }
         })
-        this.employeeData = empData;
         this.setState({empData});
     }
 
@@ -155,13 +161,68 @@ class Employees extends Component {
         this.setState({searchValue:value});
     }
 
+    downloadExcel = () =>{
+        const columns = this.columns.filter( column => column.label && column.label.trim() !== '');
+        this.setState({showLoader: true});
+        http.service({
+            url:'/employee/downloadEmployee',
+            method:'POST',
+            data:columns,
+            responseType: 'blob', // important
+        }).then(response =>{
+            const {headers, data} = response;
+            const url = window.URL.createObjectURL(new Blob([data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', headers['file_name']); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+            this.setState({showLoader: false});
+        },error =>{
+            if(error.response){
+                const {data} =error.response;
+                const message = data.description ? data.description : data.message;
+                this.showAlertBanner(message, Types.ERROR);
+            }
+            this.setState({showLoader: false});
+        });
+    }
+
+    handleFileUpload = async (event) =>{
+        const [file] = event.target.files 
+        console.log('handleFileUpload' ,file);
+        const formData = new FormData();
+        formData.append("file",file)
+        this.setState({showLoader: true});
+        try{
+           const {data} = await http.post("/employee/uploadEmployee", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }})
+            if(data.trim() !== '')
+            this.showAlertBanner("File uploaded successfully", Types.SUCCESS);
+        }
+        catch(error){
+            if(error.response){
+                const {data} =error.response;
+                const message = data.description ? data.description : data.message;
+                this.showAlertBanner(message, Types.ERROR);
+            }
+        }
+        finally{
+            this.setState({showLoader: false});
+        }
+    }
+
     render() { 
         const {empData, showAlertBanner, bannerMsg, 
-            type, timeOut,currentPage,totalPages, searchValue} = this.state;
+            type, timeOut,currentPage,totalPages, searchValue, showLoader, count} = this.state;
+        const disableClass = showLoader ? "common-disable-all" :  '';
        return (
-        <div >
+        <div className={disableClass}>
+            <Loader show={showLoader}/>
             <PageTemplate {...this.props} />
-            
+           
             <AlertBanner message={bannerMsg} 
                 showBanner={showAlertBanner} 
                 type={type} onClose={this.onAlertBannerClose} 
@@ -173,7 +234,7 @@ class Employees extends Component {
                         <Col lg={2}>
                             <div className ="emp-icons">
                                 <i className="fa fa-fw  fa-plus-square emp-icon" aria-hidden="true" title="Create"></i>
-                                <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export As Excel"></i>
+                                <i className="fa fa-fw fa-file-excel-o emp-icon" aria-hidden="true" title="Export All" onClick={this.downloadExcel}></i>
                                 <i className="fa fa-fw  fa-trash emp-icon" aria-hidden="true" title="Delete"></i>
                             </div>
                         </Col>
@@ -183,6 +244,9 @@ class Employees extends Component {
                                 value={searchValue} placeholder="Search By First Name"/>
                         
                         </Col>
+                        <Col lg={4}>
+                          <input type="file" className="form-control-file" onChange={this.handleFileUpload} />
+                        </Col>
 
                     </Row>
                 </div>
@@ -191,6 +255,7 @@ class Employees extends Component {
                     data={empData} primaryKey={"employeeId"} currentPage={currentPage}
                     onPageChange={this.handlePageChange} totalPages={totalPages} 
                     asyncData={true}
+                    count={count}
                 />
             </div>
         </div>
