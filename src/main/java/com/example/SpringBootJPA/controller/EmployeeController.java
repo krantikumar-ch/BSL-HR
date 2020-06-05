@@ -143,9 +143,9 @@ public class EmployeeController {
 	public String uploadEmployee(@RequestParam("file") MultipartFile file) throws IOException{
 		
 		String fileName = file.getOriginalFilename();
-		String filePath ="E:/kranti/workspace/gitspringboot examples/BSL-HR/app_used_files/";
+		/* String filePath ="E:/kranti/workspace/gitspringboot examples/BSL-HR/app_used_files/";
 		Path path = Paths.get(filePath+fileName);
-		Files.write(path, file.getBytes());
+		Files.write(path, file.getBytes());*/
 		return fileName;
 	}
 
