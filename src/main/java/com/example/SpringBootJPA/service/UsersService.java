@@ -16,4 +16,9 @@ public interface UsersService {
 	
 	public List<CountriesEntity> getAllCountries();
 	
+	public List<UsersEntity> getAllUsers();
+	
+	public void downloadUsers(List<Map<String,String>> columns, HttpServletResponse response) throws Exception;
+	
+	public UsersEntity getUser(Long userId);
 }

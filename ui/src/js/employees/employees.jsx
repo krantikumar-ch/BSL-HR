@@ -161,31 +161,30 @@ class Employees extends Component {
         this.setState({searchValue:value});
     }
 
-    downloadExcel = () =>{
+    downloadExcel = async () =>{
         const columns = this.columns.filter( column => column.label && column.label.trim() !== '');
         this.setState({showLoader: true});
-        http.service({
-            url:'/employee/downloadEmployee',
-            method:'POST',
-            data:columns,
-            responseType: 'blob', // important
-        }).then(response =>{
-            const {headers, data} = response;
+        try{
+            const {headers, data} = await http.post('/employee/downloadEmployee', columns, 
+            {responseType: 'blob'}); //important
             const url = window.URL.createObjectURL(new Blob([data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', headers['file_name']); //or any other extension
+            link.setAttribute('download', headers['file-name']); //or any other extension
             document.body.appendChild(link);
             link.click();
-            this.setState({showLoader: false});
-        },error =>{
+        }
+        catch(error){
             if(error.response){
                 const {data} =error.response;
                 const message = data.description ? data.description : data.message;
                 this.showAlertBanner(message, Types.ERROR);
             }
+        }
+        finally{
             this.setState({showLoader: false});
-        });
+        }
+       
     }
 
     handleFileUpload = async (event) =>{
