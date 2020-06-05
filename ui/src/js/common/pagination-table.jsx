@@ -36,17 +36,18 @@ class PaginationTable extends Component {
         const {holdInput, pageValue} = this.state;
         const {data, columns, primaryKey, classNames="", 
             style={}, pageSize, totalPages=1, 
-            currentPage=1, asyncData} = this.props;
+            currentPage=1, asyncData, count=0} = this.props;
         const renderData = asyncData ? data : this.getPageData(data, currentPage, pageSize);
         const countPages = asyncData ? totalPages : ( _.ceil(data.length/pageSize)); 
+        const total = asyncData ? count : data.length;
         return (  
             <div>
                 <div className={`custom-common-pagination-table ${classNames}`} style={style}>
                     <CustomTable data={renderData} columns={columns} primaryKey={primaryKey} />
                 </div>
                 <Row style={{"padding" : 5, "margin":0, "border":"1px solid #dee2e6"}}>
-                    <Col lg={9}/>
-                    <Col lg={3}>
+                    <Col lg={8}/>
+                    <Col lg={4}>
                         <button type="button" className="btn btn-primary bt-sm common-custom-pagination-button" 
                              disabled={currentPage === 1}
                             onClick={()=> {this.handlePageButton(1)}}>{"<<"}</button>
@@ -67,6 +68,7 @@ class PaginationTable extends Component {
                         <button type="button"  className="btn btn-primary bt-sm common-custom-pagination-button" 
                             disabled={currentPage === countPages}
                             onClick={()=> {this.handlePageButton(countPages)}} >{">>"}</button>
+                        <span style={{marginLeft:'2%'}}><strong>Total:{total}</strong> </span>
                     </Col>
                 </Row>
             </div>

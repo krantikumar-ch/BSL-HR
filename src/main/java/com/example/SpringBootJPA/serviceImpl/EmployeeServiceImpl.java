@@ -1,18 +1,29 @@
 package com.example.SpringBootJPA.serviceImpl;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.print.attribute.standard.Media;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.example.SpringBootJPA.common.AppUtils;
 import com.example.SpringBootJPA.dto.EmployeePageResponse;
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 import com.example.SpringBootJPA.exceptions.RecordNotFoundException;
@@ -28,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeEntity> getAllEmployees() {
-		return empRepository.findAll();
+		return empRepository.findAll(Sort.by("firstName"));
 	}
 
 	@Override
@@ -77,6 +88,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		response.setCurrentPage(pageNumber);
 		return response;
 		 
+	}
+
+	@Override
+	public void downloadEmployee(List<Map<String, String>> columns, HttpServletResponse response) throws IOException {
+		
+		List<EmployeeEntity> empList = getAllEmployees();
+		AppUtils.addExcelToResponse(columns, empList, "Employees", "Employee", response);
+	
 	}
 
 }
