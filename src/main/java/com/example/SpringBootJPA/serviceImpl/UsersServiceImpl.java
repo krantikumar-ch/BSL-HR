@@ -1,8 +1,12 @@
 package com.example.SpringBootJPA.serviceImpl;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -14,6 +18,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.example.SpringBootJPA.common.AppUtils;
 import com.example.SpringBootJPA.config.security.JWTUtils;
 import com.example.SpringBootJPA.entities.CountriesEntity;
 import com.example.SpringBootJPA.entities.UsersEntity;
@@ -39,7 +44,6 @@ public class UsersServiceImpl implements UsersService {
 	
 	@Override
 	public UsersEntity getUser(String userName) {
-		logger.info("Users Repository class Name {}",userRepository.getClass().getName());
 		List<UsersEntity> usersList = userRepository.findByUserNameIgnoreCase(userName);
 		if(usersList.isEmpty()){
 			throw new RecordNotFoundException(userName+" Not Exists");
@@ -75,6 +79,40 @@ public class UsersServiceImpl implements UsersService {
 	@Cacheable(cacheNames="countries")
 	public List<CountriesEntity> getAllCountries() {
 		return countryRepository.findAll(Sort.by("niceName"));
+	}
+	
+	public List<UsersEntity> getAllUsers(){
+		return userRepository.findAll(Sort.by("userName"));
+	}
+
+	@Override
+	public void downloadUsers(List<Map<String, String>> columns, 
+			HttpServletResponse response) throws Exception {
+		List<UsersEntity> usersList = getAllUsers();
+		AppUtils.addExcelToResponse(columns, usersList, "Users", "users", response);
+		
+	}
+	
+	@Override
+	public UsersEntity getUser(Long userId) {
+		Optional<UsersEntity> userOpt = userRepository.findById(userId);
+		if(!userOpt.isPresent()){
+			throw new RecordNotFoundException(userId+" not exists");
+		}
+		return userOpt.get();
+	}
+	
+	public Map<String, List<Map<String,Object>>> getUserDropdowns(){
+		Map<String, List<Map<String,Object>>> dropDowns = new HashMap<>();
+		List<CountriesEntity> countries = getAllCountries();
+		List<Map<String,Object>> countryMap = countries.stream().map( country -> {
+			Map<String,Object> item = new HashMap<>();
+			item.put("label", country.getNiceName());
+			item.put("value", country.getCountryId());
+			return item;
+		}).collect(Collectors.toList());
+		dropDowns.put("countries", countryMap);
+		return dropDowns;
 	}
 
 }

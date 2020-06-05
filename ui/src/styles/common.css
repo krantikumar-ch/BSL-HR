@@ -30,3 +30,8 @@
     background: rgba(255, 255, 255, 0.2);
     display:block;
 }
+
+.common-disable-all{
+    pointer-events: none;
+    cursor: not-allowed;
+}
