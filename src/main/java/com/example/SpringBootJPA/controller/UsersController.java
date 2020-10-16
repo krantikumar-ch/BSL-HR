@@ -1,5 +1,6 @@
 package com.example.SpringBootJPA.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,4 +56,10 @@ public class UsersController {
 		return userService.getUser(userId);
 	}
 	
+	@GetMapping("checkAppStatus")
+	public Map<String,String> checkAppStatus(){
+		Map<String,String> result = new HashMap<>();
+		result.put("status", "Running");
+		return result;
+	}
 }
