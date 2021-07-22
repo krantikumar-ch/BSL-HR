@@ -1,13 +1,9 @@
 package com.example.SpringBootJPA.dto;
 
-import java.util.List;
-
 import com.example.SpringBootJPA.entities.EmployeeEntity;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
-@Getter @Setter
 public class EmployeePageResponse{
 	
 	private List<EmployeeEntity> employees;
@@ -19,4 +15,44 @@ public class EmployeePageResponse{
 	private Integer pageSize;
 	
 	private Integer currentPage;
+
+	public List<EmployeeEntity> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<EmployeeEntity> employees) {
+		this.employees = employees;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+
+	public Integer getTotalPages() {
+		return totalPages;
+	}
+
+	public void setTotalPages(Integer totalPages) {
+		this.totalPages = totalPages;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
 }

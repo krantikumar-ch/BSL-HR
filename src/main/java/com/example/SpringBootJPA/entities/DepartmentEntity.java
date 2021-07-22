@@ -1,33 +1,15 @@
 package com.example.SpringBootJPA.entities;
 
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name="departments")
-@Getter @Setter
-@ToString
 public class DepartmentEntity {
 
 	@Id @Column(name="DEPARTMENT_ID")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="deptSeq")
-	@SequenceGenerator(name="deptSeq", sequenceName="DEPARTMENTS_SEQ", allocationSize=1)
+	@SequenceGenerator(name="deptSeq", sequenceName="DEPARTMENTS_SEQ", allocationSize=10)
 	private Long departmentId;
 	
 	@Column(name="DEPARTMENT_NAME")
@@ -43,4 +25,55 @@ public class DepartmentEntity {
 	@JoinColumn(name="department_id")
 	@OrderBy("firstName")
 	private List<EmployeeEntity> employees;
+
+	@Override
+	public String toString() {
+		return "DepartmentEntity{" +
+				"departmentId=" + departmentId +
+				", departmentName='" + departmentName + '\'' +
+				", managerId=" + managerId +
+				", locationId=" + locationId +
+				", employees=" + employees +
+				'}';
+	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public Long getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(Long managerId) {
+		this.managerId = managerId;
+	}
+
+	public Long getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
+	}
+
+	public List<EmployeeEntity> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<EmployeeEntity> employees) {
+		this.employees = employees;
+	}
 }

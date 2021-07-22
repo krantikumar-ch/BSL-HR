@@ -8,3 +8,5 @@ mvnw.cmd
 target/
 ui/node_modules/
 app_used_files/
+.idea/
+*.iml
