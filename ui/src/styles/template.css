@@ -1,24 +1,26 @@
 
 .side-nav{
-    position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
-    height: 100%;
+    /*position: fixed;      Fixed Sidebar (stay in place on scroll and position relative to viewport) */
+    /* height: 100%; */
     width: 75px;     /* Set the width of the sidebar */
     z-index: 1;      /* Stay on top of everything */
-    top: 50px;      /* Stay at the top */
+    /* top: 50px;      Stay at the top */
     background-color: #3c95f5;
-    overflow-x: hidden;     /* Disable horizontal scroll */
-    padding-top: 10px;
+   /*  overflow-x: hidden;     /* Disable horizontal scroll */
+    float:left;
+    /* padding-top: 10px; */
     /* background: #1C8EF9 !important; */
+    padding-top: 2%;
     
 }
 
 .styled-nav-item{
 
-    height: 140px;
-    width: 75px; /* width must be same size as NavBar to center */
+    height: 130px;
+   /* width: 75inhpx;  width must be same size as NavBar to center */
     text-align: center; /* Aligns <a> inside of NavIcon div */
     margin-bottom: 0;   /* Puts space between NavItems */
-    padding-top: 0px;
+    
     
 }
 
@@ -26,7 +28,7 @@
     font-size: 12px;
     color: white;
     position: relative;
-    top: -15px;
+    /* top: -15px; */
     cursor: pointer;
 }
 

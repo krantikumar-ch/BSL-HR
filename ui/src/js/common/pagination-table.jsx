@@ -68,7 +68,7 @@ class PaginationTable extends Component {
                         <button type="button"  className="btn btn-primary bt-sm common-custom-pagination-button" 
                             disabled={currentPage === countPages}
                             onClick={()=> {this.handlePageButton(countPages)}} >{">>"}</button>
-                        <span style={{marginLeft:'2%'}}><strong>Total:{total}</strong> </span>
+                        <span ><strong>Total:{total}</strong> </span>
                     </Col>
                 </Row>
             </div>
